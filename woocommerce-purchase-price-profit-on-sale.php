@@ -79,4 +79,57 @@ function add_profit_to_order_item_api( $response, $item, $request ) {
 }
 add_filter( 'woocommerce_rest_prepare_shop_order_item', 'add_profit_to_order_item_api', 10, 3 );
 
+
+// Add custom columns to revenue analytics table
+function custom_revenue_analytics_columns( $columns ) {
+    $columns['purchase_price'] = __( 'Purchase Price', 'woocommerce' );
+    $columns['profit'] = __( 'Profit', 'woocommerce' );
+    return $columns;
+}
+add_filter( 'woocommerce_analytics_revenue_by_date_columns', 'custom_revenue_analytics_columns' );
+
+// Populate custom columns with data
+function populate_custom_revenue_analytics_columns( $output, $column_id, $data, $chart_args ) {
+    if ( 'purchase_price' === $column_id ) {
+        $order_id = $data['order_id'];
+        $order = wc_get_order( $order_id );
+
+        if ( ! $order ) {
+            return $output;
+        }
+
+        // Calculate total purchase price for the order
+        $purchase_price_total = 0;
+        foreach ( $order->get_items() as $item ) {
+            $product_id = $item->get_product_id();
+            $purchase_price = get_post_meta( $product_id, '_purchase_price', true );
+            $quantity = $item->get_quantity();
+            $purchase_price_total += ( $purchase_price * $quantity );
+        }
+
+        return wc_price( $purchase_price_total );
+    } elseif ( 'profit' === $column_id ) {
+        $order_id = $data['order_id'];
+        $order = wc_get_order( $order_id );
+
+        if ( ! $order ) {
+            return $output;
+        }
+
+        // Calculate total profit for the order
+        $profit_total = 0;
+        foreach ( $order->get_items() as $item ) {
+            $profit = wc_get_order_item_meta( $item->get_id(), '_profit', true );
+            if ( $profit ) {
+                $profit_total += $profit;
+            }
+        }
+
+        return wc_price( $profit_total );
+    }
+    return $output;
+}
+add_filter( 'woocommerce_analytics_revenue_by_date_output', 'populate_custom_revenue_analytics_columns', 10, 4 );
+
+
 ?>

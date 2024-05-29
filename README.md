@@ -18,7 +18,7 @@ This plugin extends the functionality of WooCommerce by adding a purchase price 
 4. The purchase price and profit details will be accessible via the WooCommerce REST API for integration with other systems.
 
 ## Support
-If you encounter any issues or have any questions about this plugin, please feel free to [open an issue](https://github.com/Hillmax/WooCommerce-Purchase-Price-and-Profit-on-Sale/issues) on GitHub or contact us at support@example.com.
+If you encounter any issues or have any questions about this plugin, please feel free to [open an issue](https://github.com/Hillmax/WooCommerce-Purchase-Price-and-Profit-on-Sale/issues) on GitHub or contact us at agbbizng@gmail.com.
 
 ## Download
 You can download the latest version of the plugin from the [releases page](https://github.com/Hillmax/WooCommerce-Purchase-Price-and-Profit-on-Sale/releases).
